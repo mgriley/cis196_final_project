@@ -46,7 +46,7 @@ module.exports = {
   build: {
     // Template for index.html
     //index: path.resolve(__dirname, '../dist/index.html'),
-    index: path.resolve(__dirname, '../../notes_api/views/index.html.erb'),
+    index: path.resolve(__dirname, '../../notes_api/app/views/index.html.erb'),
 
     // Paths
     //assetsRoot: path.resolve(__dirname, '../dist'),

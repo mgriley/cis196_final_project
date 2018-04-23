@@ -1,7 +1,7 @@
 class NotebookController < ApplicationController
 
   def index
-    render template: "index"
+    render template: "notebook/index"
   end
 
   # Args: None
