@@ -1,14 +1,17 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
-    <router-view/>
-    <h1>Testing!</h1>
+    <file-tree></file-tree>
   </div>
 </template>
 
 <script>
+import FileTree from './file_tree.vue'
+
 export default {
-  name: 'App'
+  name: 'App',
+  components: {
+    FileTree
+  }
 }
 </script>
 
