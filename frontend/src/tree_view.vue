@@ -1,5 +1,5 @@
 <template>
-<div class="tree-view">
+<div class="tree-view folder-div">
   <p v-on:click="root_comp.select_folder(root)"> {{ root.name }} </p>
   <ul>
     <li v-for="note in root.notes"
@@ -38,4 +38,7 @@ export default {
 </script>
 
 <style>
+.folder-div {
+  margin-left: 2%
+}
 </style>

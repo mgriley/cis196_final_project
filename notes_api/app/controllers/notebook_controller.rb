@@ -16,6 +16,7 @@ class NotebookController < ApplicationController
       json = item[:json]
       folder = item[:folder]
       json[:id] = folder.id
+      json[:name] = folder.name
       json[:notes] = []
       folder.notes.each { |n|
         json[:notes] << {id: n.id, name: n.name}
@@ -23,7 +24,7 @@ class NotebookController < ApplicationController
       json[:folders] = []
       folder.folders.each { |f|
         subfolder_json = {}
-        json[:folders] << {f.name => subfolder_json}
+        json[:folders] << subfolder_json
         queue << {json: subfolder_json, folder: f}
       }
     end
@@ -50,10 +51,10 @@ class NotebookController < ApplicationController
 
   # Args:
   # note_id
-  # new_folder_id
+  # new_parent_folder_id
   def move_note
     note = Note.find(params[:note_id])
-    new_folder = Folder.find(params[:new_folder_id])
+    new_folder = Folder.find(params[:new_parent_folder_id])
     new_folder.notes << note
   end
 
@@ -91,19 +92,35 @@ class NotebookController < ApplicationController
     parent_folder.folders.create!(folder_params)
   end
 
+  def is_subfolder(parent_folder, folder)
+    parent = folder.parent_folder
+    while not parent.nil?
+      if parent.id == parent_folder.id
+        return true
+      end
+      parent = parent.parent_folder
+    end
+    return false
+  end
+
   # Args:
   # folder_id
   # new_parent_folder_id
   def move_folder
     folder = Folder.find(params[:folder_id])
     new_parent_folder = Folder.find(params[:new_parent_folder_id])
-    new_parent_folder.folders << folder
+    if (folder.id == new_parent_folder.id) || is_subfolder(folder, new_parent_folder)
+      # TODO: return error
+      puts "cannot move a folder to one of its subfolders!"
+    else
+      new_parent_folder.folders << folder
+    end
   end
 
   # Args:
   # folder_id
   def destroy_folder
-    folder = Folder.find(params[:folded_id])
+    folder = Folder.find(params[:folder_id])
     folder.destroy
   end
 
@@ -112,7 +129,7 @@ class NotebookController < ApplicationController
   # new_name
   def rename_folder
     folder = Folder.find(params[:folder_id])
-    folder.update(name: new_name)
+    folder.update(name: params[:new_name])
   end
 
 end

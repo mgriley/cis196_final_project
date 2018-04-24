@@ -10,20 +10,7 @@ module.exports = {
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-
-    // for debugging, proxy requests starting with /api
-    // to the rails dev server
-    proxyTable: {
-      /*
-      '**': {
-        target: 'http://trololofjdsl:3000',
-        changeOrigin: true
-        //pathRewrite: {
-          //'^/api/old-path': '/api/new-path'
-        //}
-      }
-      */
-    },
+    proxyTable: {},
 
     // Various Dev Server settings
     host: 'localhost', // can be overwritten by process.env.HOST
@@ -36,7 +23,7 @@ module.exports = {
     // Use Eslint Loader?
     // If true, your code will be linted during bundling and
     // linting errors and warnings will be shown in the console.
-    useEslint: false,
+    useEslint: true,
     // If true, eslint errors and warnings will also be shown in the error overlay
     // in the browser.
     showEslintErrorsInOverlay: false,
@@ -58,12 +45,10 @@ module.exports = {
 
   build: {
     // Template for index.html
-    //index: path.resolve(__dirname, '../dist/index.html'),
-    index: path.resolve(__dirname, '../../notes_api/app/views/index.html.erb'),
+    index: path.resolve(__dirname, '../dist/index.html'),
 
     // Paths
-    //assetsRoot: path.resolve(__dirname, '../dist'),
-    assetsRoot: path.resolve(__dirname, '../../notes_api/public'),
+    assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
 
