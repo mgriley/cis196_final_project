@@ -10,7 +10,20 @@ module.exports = {
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    proxyTable: {},
+
+    // for debugging, proxy requests starting with /api
+    // to the rails dev server
+    proxyTable: {
+      /*
+      '**': {
+        target: 'http://trololofjdsl:3000',
+        changeOrigin: true
+        //pathRewrite: {
+          //'^/api/old-path': '/api/new-path'
+        //}
+      }
+      */
+    },
 
     // Various Dev Server settings
     host: 'localhost', // can be overwritten by process.env.HOST

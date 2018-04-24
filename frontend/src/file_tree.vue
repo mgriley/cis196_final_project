@@ -11,7 +11,14 @@
     <button v-on:click="rename_folder">rename folder</button>
     <p>folder: {{ folder.name }}</p>
     <p>note: {{ note.name }}</p>
-    <tree-view v-bind:root_comp="this" v-bind:root="tree" v-on:select-folder="select_folder" v-on:select-note="select_note"></tree-view>
+    <tree-view
+      v-bind:root_comp="this"
+      v-bind:root="tree"
+      v-on:select-folder="select_folder"
+      v-on:select-note="select_note"
+      v-on:open-note="open_note"
+      >
+    </tree-view>
   </div>
 </template>
 
@@ -42,17 +49,32 @@ export default {
   components: {
     TreeView
   },
+  created: function () {
+    console.log('created tree, with axios')
+    this.update_tree()
+  },
   methods: {
-    select_note: function (noteId) {
+    update_tree: function () {
+      var comp = this
+      this.axios.get('api/file_tree').then(
+        function (response) {
+          comp.tree = response.data
+        }
+      )
+    },
+    select_note: function (note) {
       console.log('got the note selection')
-      console.log(noteId)
+      console.log(note)
+      this.note = note
     },
-    select_folder: function (folderId) {
+    select_folder: function (folder) {
       console.log('got the folder selection')
-      console.log(folderId)
+      console.log(folder)
+      this.folder = folder
     },
-    open_note: function () {
-      console.log('open note')
+    open_note: function (note) {
+      console.log('opening note')
+      console.log(note)
     },
     create_note: function () {
       console.log('create note')

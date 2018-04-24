@@ -1,8 +1,12 @@
 <template>
 <div class="tree-view">
-  <p v-on:click="root_comp.select_folder(root.id)"> {{ root.name }} </p>
+  <p v-on:click="root_comp.select_folder(root)"> {{ root.name }} </p>
   <ul>
-    <li v-for="note in root.notes" v-on:click="root_comp.select_note(note.id)" v-bind:key="note.id">
+    <li v-for="note in root.notes"
+      v-on:click="root_comp.select_note(note)"
+      v-on:dblclick="root_comp.open_note(note)"
+      v-bind:key="note.id"
+      >
       {{ note.name }}
     </li>
   </ul>
@@ -17,13 +21,17 @@ export default {
   name: 'TreeView',
   props: ['root_comp', 'root'],
   methods: {
-    select_folder: function (folderId) {
+    select_folder: function (folder) {
       console.log('clicked folder')
-      this.$emit('select-folder', folderId)
+      this.$emit('select-folder', folder)
     },
-    select_note: function (noteId) {
+    select_note: function (note) {
       console.log('clicked note')
-      this.$emit('select-note', noteId)
+      this.$emit('select-note', note)
+    },
+    open_note: function (note) {
+      console.log('opening note')
+      this.$emit('open-note', note)
     }
   }
 }
