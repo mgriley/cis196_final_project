@@ -6,28 +6,46 @@ class NotebookController < ApplicationController
 
   # Args: None
   def file_tree
-    tree = {}
-    queue = []
     root_folder = Folder.find_by(parent_folder: nil)
-    queue << {json: tree, folder: root_folder}
+    tree = {
+      notes: {},
+      folders: {},
+      root_folder_id: root_folder.id.to_s
+    }
+    queue = []
+    queue << {parent_folder: nil, folder: root_folder}
     while not queue.empty?
       item = queue.shift
       puts "#{item}"
-      json = item[:json]
       folder = item[:folder]
-      json[:id] = folder.id
+      parent_folder = item[:parent_folder]
+      json = {}
+      json[:id] = folder.id.to_s
       json[:name] = folder.name
+      if parent_folder.nil?
+        json[:parent_folder_id] = nil
+      else
+        json[:parent_folder_id] = parent_folder.id.to_s
+      end
       json[:notes] = []
       folder.notes.each { |n|
-        json[:notes] << {id: n.id, name: n.name}
+        note_json = {
+          id: n.id,
+          name: n.name,
+          parent_folder_id: folder.id
+        }
+        tree[:notes][n.id] = note_json
+        json[:notes] << n.id.to_s
       }
       json[:folders] = []
       folder.folders.each { |f|
-        subfolder_json = {}
-        json[:folders] << subfolder_json
-        queue << {json: subfolder_json, folder: f}
+        json[:folders] << f.id.to_s
+        queue << {parent_folder: folder, folder: f}
       }
+      tree[:folders][folder.id] = json
     end
+    # TODO - debug
+    puts tree
     render json: tree
   end
 

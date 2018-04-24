@@ -13,7 +13,8 @@
     <p>note: {{ note ? note.name : 'none' }}</p>
     <tree-view
       v-bind:root_comp="this"
-      v-bind:root="tree"
+      v-bind:tree="tree"
+      v-bind:folder_id="tree.root_folder_id"
       v-on:select-folder="select_folder"
       v-on:select-note="select_note"
       v-on:open-note="open_note"
@@ -74,10 +75,18 @@ var sampleTree = {
 }
 
 var emptyTree = {
-  name: 'No files',
-  id: -1,
-  notes: [],
-  folders: []
+  notes: {
+  },
+  folders: {
+    0: {
+      id: 0,
+      name: "placeholder",
+      parent_folder_id: null,
+      folders: [],
+      notes: []
+    }
+  },
+  root_folder_id: 0
 }
 
 export default {
@@ -104,7 +113,8 @@ export default {
       this.axios.get('api/file_tree').then(
         function (response) {
           comp.tree = response.data
-          console.log(comp.tree)
+          console.log('tree: ')
+          console.log(JSON.stringify(comp.tree, null, " "))
         }
       )
     },
