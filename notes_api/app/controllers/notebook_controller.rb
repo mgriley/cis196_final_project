@@ -75,10 +75,11 @@ class NotebookController < ApplicationController
 
   # Args:
   # note_id
-  # new_text
-  def change_note_text
+  # new_name
+  # new_content
+  def update_note
     note = Note.find(params[:note_id])
-    note.update(content: params[:new_text])
+    note.update(name: params[:new_name], content: params[:new_content])
   end
 
   # Args:
