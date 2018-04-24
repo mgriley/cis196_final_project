@@ -3,11 +3,7 @@
   <h1>choose a new folder</h1>  
   <p>current folder: {{ current_folder ? current_folder.name : '' }}</p>
   <p>new folder: {{ new_folder ? new_folder.name : '' }}</p>
-  <tree-view
-    v-bind:root_comp="this"
-    v-bind:root="tree"
-    v-on:select_folder="select_folder"
-  >
+  <tree-view v-bind:tree="tree" v-bind:folder_id="tree.root_folder_id" v-on:select_folder="select_folder">
   </tree-view>
   <button @click="submit">submit</button>
 </modal>

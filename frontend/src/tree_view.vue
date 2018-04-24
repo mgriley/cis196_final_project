@@ -1,10 +1,10 @@
 <template>
 <div class="tree-view folder-div">
-  <p v-on:click="root_comp.select_folder(folder)"> {{ folder ? folder.name : '' }} </p>
+  <p v-on:click="select_folder(folder)"> {{ folder ? folder.name : '' }} </p>
   <ul>
     <li v-for="child_note in child_notes()"
-      v-on:click="root_comp.select_note(child_note)"
-      v-on:dblclick="root_comp.open_note(child_note)"
+      v-on:click="select_note(child_note)"
+      v-on:dblclick="open_note(child_note)"
       v-bind:key="child_note.id"
       >
       {{ child_note.name }}
@@ -12,9 +12,11 @@
   </ul>
   <template v-for="child_folder in child_folders()">
     <tree-view
-      v-bind:root_comp="root_comp"
       v-bind:tree="tree"
       v-bind:folder_id="child_folder.id"
+      @select_folder="select_folder"
+      @select_note="select_note"
+      @open_note="open_note"
       v-bind:key="child_folder.id"
     >
     </tree-view>
@@ -54,15 +56,15 @@ export default {
     },
     select_folder: function (some_folder) {
       console.log('clicked folder')
-      this.$emit('select-folder', some_folder)
+      this.$emit('select_folder', some_folder)
     },
     select_note: function (note) {
       console.log('clicked note')
-      this.$emit('select-note', note)
+      this.$emit('select_note', note)
     },
     open_note: function (note) {
       console.log('opening note')
-      this.$emit('open-note', note)
+      this.$emit('open_note', note)
     }
   }
 }

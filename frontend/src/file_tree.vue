@@ -12,12 +12,11 @@
     <p>folder: {{ folder ? folder.name : 'none' }}</p>
     <p>note: {{ note ? note.name : 'none' }}</p>
     <tree-view
-      v-bind:root_comp="this"
       v-bind:tree="tree"
       v-bind:folder_id="tree.root_folder_id"
-      v-on:select-folder="select_folder"
-      v-on:select-note="select_note"
-      v-on:open-note="open_note"
+      v-on:select_folder="select_folder"
+      v-on:select_note="select_note"
+      v-on:open_note="open_note"
       >
     </tree-view>
     <create-folder
