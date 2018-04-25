@@ -1,6 +1,6 @@
 <template>
   <div class="file_tree">
-    <h1>welcome</h1>
+    <h1>welcome to mote</h1>
     <div class="tree_buttons">
       <div class="note_buttons">
         <button v-on:click="create_note" :disabled="!folder">create note</button>
