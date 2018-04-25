@@ -12,7 +12,7 @@
     <div class="action_footer">
       <button @click="submit">submit</button>
     </div>
-    <tree-view v-bind:tree="tree" v-bind:folder_id="tree.root_folder_id" v-on:select_folder="select_folder">
+    <tree-view v-bind:tree="tree" v-bind:folder_id="tree.root_folder_id" :to_fold="to_fold" v-on:select_folder="select_folder">
     </tree-view>
   </div>
 </modal>
@@ -23,7 +23,7 @@ import TreeView from './tree_view.vue'
 
 export default {
   name: 'Mover',
-  props: ['modalName', 'current_folder', 'tree'],
+  props: ['modalName', 'current_folder', 'tree', 'to_fold'],
   components: {
     TreeView
   },

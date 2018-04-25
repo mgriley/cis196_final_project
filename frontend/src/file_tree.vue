@@ -25,6 +25,7 @@
       class="file_view"
       v-bind:tree="tree"
       v-bind:folder_id="tree.root_folder_id"
+      :to_fold="[]"
       v-on:select_folder="select_folder"
       v-on:select_note="select_note"
       v-on:open_note="open_note"
@@ -56,6 +57,7 @@
        v-bind:current_folder="folder"
        v-bind:tree="tree"
        v-on:done="move_note"
+       :to_fold="[]"
     >
     </mover>
     <mover
@@ -63,6 +65,7 @@
        v-bind:current_folder="folder"
        v-bind:tree="tree"
        v-on:done="move_folder"
+       :to_fold="folder ? [folder.id] : []"
     >
     </mover>
   </div>

@@ -1,8 +1,9 @@
 <template>
 <div class="tree-view outer-div">
   <div class="file_entry folder_entry" v-on:click="select_folder(folder)">
-    <strong>F</strong> {{ folder ? folder.name : '' }}
+    <strong>F</strong> {{ folder ? folder.name : '' }} <strong>{{ is_folded ? '{...}' : '' }}</strong>
   </div>
+  <template v-if="!is_folded">
   <div class="folder-div">
     <div 
       class="file_entry note_entry"
@@ -17,6 +18,7 @@
       <tree-view
         v-bind:tree="tree"
         v-bind:folder_id="child_folder.id"
+        :to_fold="to_fold"
         @select_folder="select_folder"
         @select_note="select_note"
         @open_note="open_note"
@@ -25,14 +27,19 @@
       </tree-view>
     </template>
   </div>
+  </template>
 </div>
 </template>
 
 <script>
 export default {
   name: 'TreeView',
-  props: ['root_comp', 'tree', 'folder_id'],
+  props: ['root_comp', 'tree', 'folder_id', 'to_fold'],
   computed: {
+    is_folded: function () {
+      console.log('to fold:', this.to_fold)
+      return this.to_fold.indexOf(this.folder_id) > -1
+    },
     folder: function () {
       return this.tree['folders'][this.folder_id]
     }
