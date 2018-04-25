@@ -65,7 +65,7 @@ module.exports = {
     //assetsRoot: path.resolve(__dirname, '../dist'),
     assetsRoot: path.resolve(__dirname, '../../notes_api/public'),
     assetsSubDirectory: 'static',
-    assetsPublicPath: '/',
+    assetsPublicPath: '/public/assets',
 
     /**
      * Source Maps
