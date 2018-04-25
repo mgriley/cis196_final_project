@@ -26,6 +26,8 @@
       v-bind:tree="tree"
       v-bind:folder_id="tree.root_folder_id"
       :to_fold="[]"
+      :highlighted_note="note ? note.id : null"
+      :highlighted_folder="folder ? folder.id : null"
       v-on:select_folder="select_folder"
       v-on:select_note="select_note"
       v-on:open_note="open_note"

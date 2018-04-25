@@ -12,7 +12,13 @@
     <div class="action_footer">
       <button @click="submit">submit</button>
     </div>
-    <tree-view v-bind:tree="tree" v-bind:folder_id="tree.root_folder_id" :to_fold="to_fold" v-on:select_folder="select_folder">
+    <tree-view 
+      v-bind:tree="tree"
+      v-bind:folder_id="tree.root_folder_id"
+      :to_fold="to_fold"
+      :highlighted_note="null"
+      :highlighted_folder="null"
+      v-on:select_folder="select_folder">
     </tree-view>
   </div>
 </modal>

@@ -19,6 +19,8 @@
         v-bind:tree="tree"
         v-bind:folder_id="child_folder.id"
         :to_fold="to_fold"
+        :highlighted_note="highlighted_note"
+        :highlighted_folder="highlighted_folder"
         @select_folder="select_folder"
         @select_note="select_note"
         @open_note="open_note"
@@ -34,8 +36,14 @@
 <script>
 export default {
   name: 'TreeView',
-  props: ['root_comp', 'tree', 'folder_id', 'to_fold'],
+  props: ['root_comp', 'tree', 'folder_id', 'to_fold', 'highlighted_note', 'highlighted_folder'],
   computed: {
+    is_highlighted_note: function (note_id) {
+      return note_id === this.highlighted_note
+    },
+    is_highlighted_folder: function () {
+      return this.folder_id === this.highlighted_folder
+    },
     is_folded: function () {
       console.log('to fold:', this.to_fold)
       return this.to_fold.indexOf(this.folder_id) > -1
