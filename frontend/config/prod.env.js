@@ -1,5 +1,5 @@
 'use strict'
 module.exports = {
   NODE_ENV: '"production"',
-  API_URL: '"TODO"'
+  API_URL: '"https://mote-note.herokuapp.com/"'
 }

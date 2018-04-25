@@ -4,8 +4,6 @@ class CreateNotes < ActiveRecord::Migration[5.1]
       t.string :name
       t.text :content
       t.references :folder, foreign_key: true
-
-      t.timestamps
     end
   end
 end

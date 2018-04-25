@@ -10,13 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180423180750) do
+ActiveRecord::Schema.define(version: 20180425171510) do
 
   create_table "folders", force: :cascade do |t|
     t.string "name"
     t.integer "parent_folder_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.index ["parent_folder_id"], name: "index_folders_on_parent_folder_id"
   end
 
@@ -24,8 +22,6 @@ ActiveRecord::Schema.define(version: 20180423180750) do
     t.string "name"
     t.text "content"
     t.integer "folder_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.index ["folder_id"], name: "index_notes_on_folder_id"
   end
 
