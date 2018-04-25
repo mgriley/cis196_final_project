@@ -3,16 +3,16 @@
     <h1>welcome</h1>
     <div class="tree_buttons">
       <div class="note_buttons">
-        <button v-on:click="create_note">create note</button>
-        <button v-on:click="try_move_note">move note</button>
-        <button v-on:click="try_rename_note">rename note</button>
-        <button v-on:click="delete_note">delete note</button>
+        <button v-on:click="create_note" :disabled="!folder">create note</button>
+        <button v-on:click="try_move_note" :disabled="!note">move note</button>
+        <button v-on:click="try_rename_note" :disabled="!note">rename note</button>
+        <button v-on:click="delete_note" :disabled="!note">delete note</button>
       </div>
       <div class="folder_buttons">
-        <button v-on:click="try_create_folder">create folder</button>
-        <button v-on:click="try_move_folder">move folder</button>
-        <button v-on:click="try_rename_folder">rename folder</button>
-        <button v-on:click="delete_folder">delete folder</button>
+        <button v-on:click="try_create_folder" :disabled="!folder">create folder</button>
+        <button v-on:click="try_move_folder" :disabled="!folder">move folder</button>
+        <button v-on:click="try_rename_folder" :disabled="!folder">rename folder</button>
+        <button v-on:click="delete_folder" :disabled="!folder">delete folder</button>
       </div>
     </div>
     <p>
@@ -73,20 +73,6 @@ import TreeView from './tree_view.vue'
 import NamePicker from './name_picker.vue'
 import Mover from './mover.vue'
 
-var sampleTree = {
-  name: 'testing',
-  id: 0,
-  notes: [{name: 'a', id: 0}, {name: 'b', id: 1}],
-  folders: [
-    {
-      id: 1,
-      name: 'child',
-      notes: [{name: 'c', id: 2}],
-      folders: []
-    }
-  ]
-}
-
 var emptyTree = {
   notes: {
   },
@@ -117,36 +103,34 @@ export default {
     Mover
   },
   mounted: function () {
+    var comp = this
     this.update_tree()
   },
   methods: {
-    update_tree: function () {
+    update_tree: function (callback) {
       var comp = this
       this.axios.get('api/file_tree').then(
         function (response) {
           comp.tree = response.data
+          if (callback) {
+            callback()
+          }
           console.log('tree: ')
           console.log(JSON.stringify(comp.tree, null, " "))
         }
       )
     },
     select_note: function (note) {
-      console.log('got the note selection')
-      console.log(note)
       this.note = note
+      this.folder = this.tree['folders'][note.parent_folder_id]
     },
     select_folder: function (folder) {
-      console.log('got the folder selection')
-      console.log(folder)
       this.folder = folder
     },
     open_note: function (note) {
-      console.log('opening note')
-      console.log(note)
       this.$router.push({name: 'Note', params: {id: note.id}})
     },
     create_note: function () {
-      console.log('create note')
       var comp = this
       if (this.folder) {
         var data = {folder_id: this.folder.id}
@@ -156,7 +140,7 @@ export default {
           }
         )
       } else {
-        console.log('no folder selected')
+        console.error('no folder selected')
       }
     },
     try_move_note: function () {
@@ -164,6 +148,10 @@ export default {
     },
     move_note: function (new_folder) {
       console.log('move note')
+      if (!this.note) {
+        console.error('no note selected')
+        return
+      }
       var data = {
         note_id: this.note.id,
         new_parent_folder_id: new_folder.id
@@ -171,19 +159,24 @@ export default {
       var comp = this
       this.axios.post('/api/move_note', data).then(
         function (response) {
-          comp.update_tree()
+          var moved_note = response.data
+          comp.update_tree(function () {
+            comp.select_note(moved_note)
+          })
         }
       )
     },
     delete_note: function () {
       console.log('del note')
-      if (this.note === null) {
-        return;
+      if (!this.note) {
+        console.error('no note selected')
+        return
       }
       var comp = this;
       var data = {note_id: this.note.id}
       this.axios.post('/api/destroy_note', data).then(
         function (response) {
+          comp.note = null
           comp.update_tree()
         }
       )
@@ -192,11 +185,18 @@ export default {
       this.$modal.show('rename_note')
     },
     rename_note: function (new_name) {
+      if (!this.note) {
+        console.error('no note selected')
+        return
+      }
       var comp = this
       var data = {new_name: new_name, note_id: this.note.id}
       this.axios.post('/api/rename_note', data).then(
         function (response) {
-          comp.update_tree()
+          var renamed_note = response.data
+          comp.update_tree(function () {
+            comp.select_note(renamed_note)
+          })
         }
       )
     },
@@ -205,6 +205,10 @@ export default {
     },
     create_folder: function (name) {
       console.log('creating a folder')
+      if (!this.folder) {
+        console.error('no folder selected')
+        return
+      }
       var comp = this
       var data = {
         name: name,
@@ -221,6 +225,10 @@ export default {
     },
     move_folder: function (new_folder) {
       console.log('moving folder')
+      if (!this.folder) {
+        console.error('no folder selected')
+        return
+      }
       var comp = this
       var data = {
         folder_id: this.folder.id,
@@ -228,14 +236,18 @@ export default {
       }
       this.axios.post('/api/move_folder', data).then(
         function (response) {
-          comp.update_tree()
+          var moved_folder = response.data
+          comp.update_tree(function () {
+            comp.select_folder(moved_folder)
+          })
         }
       )
     },
     delete_folder: function () {
       console.log('delete folder')
-      if (this.folder === null) {
-        return;
+      if (!this.folder) {
+        console.error('no folder selected')
+        return
       }
       var data = {
         folder_id: this.folder.id
@@ -243,6 +255,8 @@ export default {
       var comp = this
       this.axios.post('api/destroy_folder', data).then(
         function (response) {
+          comp.note = null
+          comp.folder = null
           comp.update_tree()
         }
       )
@@ -252,11 +266,18 @@ export default {
     },
     rename_folder: function (new_name) {
       console.log('renaming note')
+      if (!this.folder) {
+        console.error('no folder selected')
+        return
+      }
       var comp = this
       var data = {new_name: new_name, folder_id: this.folder.id}
       this.axios.post('/api/rename_folder', data).then(
         function (response) {
-          comp.update_tree()
+          var renamed_folder = response.data
+          comp.update_tree(function () {
+            comp.folder = renamed_folder
+          })
         }
       )
     }

@@ -42,6 +42,10 @@ export default {
   },
   methods: {
     return_to_files: function () {
+      // disallow empty names
+      if (this.new_name === '') {
+        this.new_name = 'untitled'
+      }
       var data = {
         note_id: this.note_id,
         new_name: this.new_name,

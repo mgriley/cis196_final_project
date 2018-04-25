@@ -2,6 +2,9 @@
 <modal :name="modalName">
   <div class="modal_body">
     <slot></slot>
+    <div class="error_msg" v-if="errors">
+      <strong>error</strong> the name can't be empty
+    </div>
     <div>
       <input v-model="name" :placeholder="placeholder">
     </div>
@@ -17,14 +20,22 @@ export default {
   name: 'NamePicker',
   data: function() {
     return {
-      name: ''
+      name: '',
+      errors: false
     }
   },
   props: ['modalName', 'placeholder'],
   methods: {
     submit: function () {
-      this.$emit('done', this.name)
-      this.$modal.hide(this.modalName)
+      if (this.name === '') {
+        this.errors = true
+      } else {
+        this.$emit('done', this.name)
+        this.$modal.hide(this.modalName)
+      }
+    },
+    is_valid: function () {
+
     }
   }
 }
