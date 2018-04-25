@@ -16,8 +16,8 @@
       v-bind:tree="tree"
       v-bind:folder_id="tree.root_folder_id"
       :to_fold="to_fold"
-      :highlighted_note="null"
-      :highlighted_folder="null"
+      :highlighted_note="highlighted_note"
+      :highlighted_folder="new_folder ? new_folder.id : null"
       v-on:select_folder="select_folder">
     </tree-view>
   </div>
@@ -29,7 +29,9 @@ import TreeView from './tree_view.vue'
 
 export default {
   name: 'Mover',
-  props: ['modalName', 'current_folder', 'tree', 'to_fold'],
+  props: [
+    'modalName', 'current_folder', 'tree',
+    'to_fold', 'highlighted_note'],
   components: {
     TreeView
   },

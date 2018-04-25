@@ -1,6 +1,6 @@
 <template>
 <div class="tree-view outer-div">
-  <div class="file_entry folder_entry" v-on:click="select_folder(folder)">
+  <div class="file_entry folder_entry" :class="{ highlighted_folder: is_highlighted_folder }" v-on:click="select_folder(folder)">
     <strong>F</strong> {{ folder ? folder.name : '' }} <strong>{{ is_folded ? '{...}' : '' }}</strong>
   </div>
   <template v-if="!is_folded">
@@ -8,6 +8,7 @@
     <div 
       class="file_entry note_entry"
       v-for="child_note in child_notes()"
+      :class="{ highlighted_note: is_highlighted_note(child_note) }"
       v-on:click="select_note(child_note)"
       v-on:dblclick="open_note(child_note)"
       v-bind:key="child_note.id"
@@ -38,14 +39,11 @@ export default {
   name: 'TreeView',
   props: ['root_comp', 'tree', 'folder_id', 'to_fold', 'highlighted_note', 'highlighted_folder'],
   computed: {
-    is_highlighted_note: function (note_id) {
-      return note_id === this.highlighted_note
-    },
     is_highlighted_folder: function () {
+      console.log('h_f: ', this.highlighted_folder)
       return this.folder_id === this.highlighted_folder
     },
     is_folded: function () {
-      console.log('to fold:', this.to_fold)
       return this.to_fold.indexOf(this.folder_id) > -1
     },
     folder: function () {
@@ -53,6 +51,10 @@ export default {
     }
   },
   methods: {
+    is_highlighted_note: function (note) {
+      console.log('h_note: ', this.highlighted_note)
+      return note.id === this.highlighted_note
+    },
     child_notes: function () {
       var note_ids = this.folder['notes']
       var notes = []
@@ -96,5 +98,11 @@ export default {
   border-style: solid;
   border-width: 2px;
   padding: 0.75em;
+}
+.highlighted_note {
+  color: dodgerblue;
+}
+.highlighted_folder {
+  color: dodgerblue;
 }
 </style>

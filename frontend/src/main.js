@@ -7,7 +7,7 @@ import axios from 'axios'
 import VueAxios from 'vue-axios'
 import VModal from 'vue-js-modal'
 
-axios.defaults.baseURL = 'http://127.0.0.1:3000'
+axios.defaults.baseURL = process.env.API_URL
 Vue.use(VueAxios, axios)
 Vue.use(VModal)
 

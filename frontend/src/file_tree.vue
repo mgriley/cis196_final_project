@@ -60,6 +60,7 @@
        v-bind:tree="tree"
        v-on:done="move_note"
        :to_fold="[]"
+       :highlighted_note="note ? note.id : null"
     >
     </mover>
     <mover
@@ -68,6 +69,7 @@
        v-bind:tree="tree"
        v-on:done="move_folder"
        :to_fold="folder ? [folder.id] : []"
+       :highlighted_note="null"
     >
     </mover>
   </div>
