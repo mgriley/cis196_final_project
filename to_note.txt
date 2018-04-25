@@ -1,0 +1,2 @@
+To only push the ruby part of the project to heroku, do:
+git subtree push --prefix notes_api heroku master
