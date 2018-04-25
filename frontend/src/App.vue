@@ -16,6 +16,22 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
-  margin-top: 60px;
+  margin: 1em;
+}
+button {
+  font-size: 1em;
+  border: solid;
+  border-width: 2px;
+  text-decoration: none;
+}
+.modal_body {
+  margin: 1em;
+}
+input {
+  font-size: 1em;
+}
+.action_footer {
+  margin-top: 1em;
+  margin-bottom: 1em;
 }
 </style>

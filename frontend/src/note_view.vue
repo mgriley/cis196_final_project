@@ -1,17 +1,19 @@
 <template>
-<div id="note-view">
+<div id="note-view" class="note_view">
   <div>
     <button @click="return_to_files">back</button>
   </div>
-  <div>
-    <input
-    class="name"
-    v-model="new_name"
-    >
-  </div>
-  <div>
-    <textarea v-model="new_content">
-    </textarea>
+  <div class="inner_note_view">
+    <div>
+      <input
+      class="name_input"
+      v-model="new_name"
+      >
+    </div>
+    <div class="content_div">
+      <textarea class="content_area" v-model="new_content">
+      </textarea>
+    </div>
   </div>
 </div>
 </template>
@@ -59,4 +61,22 @@ export default {
 </script>
 
 <style>
+.inner_note_view {
+  text-align: center;
+}
+.name_input {
+  font-size: 2em;
+  width: 10em;
+}
+.content_div {
+  //text-align: center;
+}
+.content_area {
+  font-size: 1em;
+  //display: block;
+  width: 80%;
+  height: 20em;
+  resize: none;
+  margin: 1em
+}
 </style>

@@ -1,11 +1,17 @@
 <template>
 <modal v-bind:name="modalName" height="auto" scrollable>
-  <h1>choose a new folder</h1>  
-  <p>current folder: {{ current_folder ? current_folder.name : '' }}</p>
-  <p>new folder: {{ new_folder ? new_folder.name : '' }}</p>
-  <tree-view v-bind:tree="tree" v-bind:folder_id="tree.root_folder_id" v-on:select_folder="select_folder">
-  </tree-view>
-  <button @click="submit">submit</button>
+  <div class="modal_body">
+    <h1>choose a new folder</h1>  
+    <!--<p>current folder: {{ current_folder ? current_folder.name : '' }}</p>-->
+    <p>
+      <strong>new folder</strong> {{ new_folder ? new_folder.name : '' }}
+    </p>
+    <div class="action_footer">
+      <button @click="submit">submit</button>
+    </div>
+    <tree-view v-bind:tree="tree" v-bind:folder_id="tree.root_folder_id" v-on:select_folder="select_folder">
+    </tree-view>
+  </div>
 </modal>
 </template>
 

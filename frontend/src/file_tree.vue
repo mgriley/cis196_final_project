@@ -1,17 +1,28 @@
 <template>
   <div class="file_tree">
-    <h1>welcome!</h1>
-    <button v-on:click="create_note">create note</button>
-    <button v-on:click="try_move_note">move note</button>
-    <button v-on:click="delete_note">delete note</button>
-    <button v-on:click="try_rename_note">rename note</button>
-    <button v-on:click="try_create_folder">create folder</button>
-    <button v-on:click="try_move_folder">move folder</button>
-    <button v-on:click="delete_folder">delete folder</button>
-    <button v-on:click="try_rename_folder">rename folder</button>
-    <p>folder: {{ folder ? folder.name : 'none' }}</p>
-    <p>note: {{ note ? note.name : 'none' }}</p>
+    <h1>welcome</h1>
+    <div class="tree_buttons">
+      <div class="note_buttons">
+        <button v-on:click="create_note">create note</button>
+        <button v-on:click="try_move_note">move note</button>
+        <button v-on:click="try_rename_note">rename note</button>
+        <button v-on:click="delete_note">delete note</button>
+      </div>
+      <div class="folder_buttons">
+        <button v-on:click="try_create_folder">create folder</button>
+        <button v-on:click="try_move_folder">move folder</button>
+        <button v-on:click="try_rename_folder">rename folder</button>
+        <button v-on:click="delete_folder">delete folder</button>
+      </div>
+    </div>
+    <p>
+      <strong>selected folder</strong> {{ folder ? folder.name : 'none' }}
+    </h3>
+    <p>
+      <strong>selected note</strong> {{ note ? note.name : 'none' }}
+    </p>
     <tree-view
+      class="file_view"
       v-bind:tree="tree"
       v-bind:folder_id="tree.root_folder_id"
       v-on:select_folder="select_folder"
@@ -19,23 +30,27 @@
       v-on:open_note="open_note"
       >
     </tree-view>
-    <create-folder
-       v-bind:parent_folder="folder"
-       v-on:done="create_folder"
+    <name-picker
+      modalName="create_folder"  
+      placeholder="pick a name"
+      v-on:done="create_folder"
     >
-    </create-folder>
-    <name-changer
+      <h1>folder name:</h1>
+    </name-picker>
+    <name-picker
        modalName="rename_folder"
        v-bind:placeholder="folder ? folder.name : ''"
        v-on:done="rename_folder"
     >
-    </name-changer>
-    <name-changer
+      <h1>rename folder:</h1>
+    </name-picker>
+    <name-picker
        modalName="rename_note"
        v-bind:placeholder="note ? note.name : ''"
        v-on:done="rename_note"
     >
-    </name-changer>
+      <h1>rename note</h1>
+    </name-picker>
     <mover
        modalName="move_note"
        v-bind:current_folder="folder"
@@ -55,8 +70,7 @@
 
 <script>
 import TreeView from './tree_view.vue'
-import CreateFolder from './create_folder.vue'
-import NameChanger from './name_changer.vue'
+import NamePicker from './name_picker.vue'
 import Mover from './mover.vue'
 
 var sampleTree = {
@@ -99,11 +113,10 @@ export default {
   },
   components: {
     TreeView,
-    CreateFolder,
-    NameChanger,
+    NamePicker,
     Mover
   },
-  created: function () {
+  mounted: function () {
     this.update_tree()
   },
   methods: {
@@ -139,7 +152,7 @@ export default {
         var data = {folder_id: this.folder.id}
         this.axios.post('api/create_note', data).then(
           function (response) {
-            comp.update_tree()
+            comp.open_note(response.data)
           }
         )
       } else {
@@ -190,10 +203,13 @@ export default {
     try_create_folder: function () {
       this.$modal.show("create_folder")
     },
-    create_folder: function (userData) {
+    create_folder: function (name) {
       console.log('creating a folder')
       var comp = this
-      var data = userData
+      var data = {
+        name: name,
+        parent_folder_id: this.folder.id
+      }
       this.axios.post('api/create_folder', data).then(
         function (response) {
           comp.update_tree()
@@ -249,4 +265,12 @@ export default {
 </script>
 
 <style>
+.file_view {
+}
+.tree_buttons button {
+  width: 8em;  
+}
+.note_buttons {
+  margin-bottom: 0.5em;
+}
 </style>

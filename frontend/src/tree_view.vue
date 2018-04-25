@@ -1,26 +1,30 @@
 <template>
-<div class="tree-view folder-div">
-  <p v-on:click="select_folder(folder)"> {{ folder ? folder.name : '' }} </p>
-  <ul>
-    <li v-for="child_note in child_notes()"
+<div class="tree-view outer-div">
+  <div class="file_entry folder_entry" v-on:click="select_folder(folder)">
+    <strong>F</strong> {{ folder ? folder.name : '' }}
+  </div>
+  <div class="folder-div">
+    <div 
+      class="file_entry note_entry"
+      v-for="child_note in child_notes()"
       v-on:click="select_note(child_note)"
       v-on:dblclick="open_note(child_note)"
       v-bind:key="child_note.id"
       >
-      {{ child_note.name }}
-    </li>
-  </ul>
-  <template v-for="child_folder in child_folders()">
-    <tree-view
-      v-bind:tree="tree"
-      v-bind:folder_id="child_folder.id"
-      @select_folder="select_folder"
-      @select_note="select_note"
-      @open_note="open_note"
-      v-bind:key="child_folder.id"
-    >
-    </tree-view>
-  </template>
+      <strong>N</strong> {{ child_note.name }}
+    </div>
+    <template v-for="child_folder in child_folders()">
+      <tree-view
+        v-bind:tree="tree"
+        v-bind:folder_id="child_folder.id"
+        @select_folder="select_folder"
+        @select_note="select_note"
+        @open_note="open_note"
+        v-bind:key="child_folder.id"
+      >
+      </tree-view>
+    </template>
+  </div>
 </div>
 </template>
 
@@ -71,7 +75,11 @@ export default {
 </script>
 
 <style>
+.outer-div {
+}
 .folder-div {
-  margin-left: 2%
+  border-style: solid;
+  border-width: 2px;
+  padding: 0.75em;
 }
 </style>
