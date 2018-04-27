@@ -150,8 +150,12 @@ class NotebookController < ApplicationController
   # Reply: empty
   def destroy_folder
     folder = Folder.find(params[:folder_id])
-    folder.destroy
-    render json: {}
+    if folder.parent_folder.nil?
+      raise Exception.new('you cannot delete the root folder!')
+    else
+      folder.destroy
+      render json: {}
+    end
   end
 
   # Args:
